@@ -3,11 +3,13 @@
 namespace app\controller;
 
 use app\BaseController;
+use app\model\Star;
 use think\facade\Session;
 use think\facade\View;
 use think\facade\Request;
 use app\model\User;
 use app\model\Artical as ArticalModel;
+use think\response\Redirect;
 
 class Artical extends BaseController
 {
@@ -51,6 +53,31 @@ class Artical extends BaseController
 
     }
 
+    //收藏文章
+    function star($articalId)
+    {
+        if(!Session::get('username'))
+        {
+            return \redirect('http://localhost:8000/login/index');
+        }else
+        {
+            //收藏文章涉及Artical表和Star表
+            $text = ArticalModel::find($articalId);
+            ++$text->star_count;
+            $text->save();
+
+            $userQuery = User::where('username', Session::get('username'))->find();
+            $userId = $userQuery->user_id;
+            Star::create([
+                'user_id'       =>      $userId,
+                'text_id'       =>      $articalId,
+                'star_time'   =>     date('y-m-d h:i:s')
+            ]);
+
+            return;
+        }
+    }
+
     //编辑文章
     function edit($textId)
     {
@@ -81,8 +108,9 @@ class Artical extends BaseController
     }
 
 
-    function textLook($textId, $tag = '#pageHead')
+    function textLook($textId, $tag = '#pageHead', $star = false)
     {
+        //主要用于改变右上角样式
         if(Session::get('username'))
         {
             $username = Session::get('username');
@@ -92,7 +120,35 @@ class Artical extends BaseController
         {
             $userId = -1;
         }
-        $queryArtical = ArticalModel::where('artical_id',$textId)->find();
+
+        //点击收藏按钮判断
+        if($star && !Session::get('username'))
+        {
+            return \redirect('http://localhost:8000/login/index');
+        }else if($star && Session::get('username'))
+        {
+            //收藏之前要判断是否存在用户收藏此篇文章的记录
+            $starQuery = Star::where('user_id', $userId)->where('text_id', $textId)->find();
+            if(!$starQuery)
+            {
+                //收藏文章涉及Artical表和Star表
+                $text = ArticalModel::find($textId);
+                ++$text->star_count;
+                $text->save();
+
+                Star::create([
+                    'user_id'       =>      $userId,
+                    'text_id'       =>      $textId,
+                    'star_time'   =>     date('y-m-d h:i:s')
+                ]);
+                echo "<script> alert('收藏成功！'); </script>";
+            }else
+            {
+                echo "<script> alert('您已收藏该文章！'); </script>";
+            }
+        }
+
+        $queryArtical = ArticalModel::find($textId);
         $authorId = $queryArtical->author_id;
         $textTitle = $queryArtical->title;
         $authorName = User::find($authorId)->username;
@@ -121,7 +177,8 @@ class Artical extends BaseController
             'textComment'   =>          $textComment,
             'textScan'      =>          $textScan,
             'tag'           =>          $tag,
-            'closeText'     =>          $closeText
+            'closeText'     =>          $closeText,
+            'textId'        =>          $textId
         ]);
     }
 }

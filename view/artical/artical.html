@@ -186,7 +186,7 @@
         浏览数：<span id="look-count">{$textScan}</span></p>
     <button id="like-btn">点赞</button>
     <button id="submit-btn">关注作者</button>
-    <button id="star-btn">收藏文章</button>
+    <a href="http://localhost:8000/artical/textLook/textId/{$textId}/star/true"><button id="star-btn">收藏文章</button></a>
 <!--    评论区-->
     <form action="submit_comment.php" method="post">
       <label for="comment">发表评论：</label><br>

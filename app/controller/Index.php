@@ -9,6 +9,7 @@ use app\model\Comment;
 use app\model\Dig;
 use app\model\Star;
 use app\model\Subcribe;
+use think\facade\Db;
 use think\facade\Env;
 use think\facade\View;
 use think\Request;
@@ -26,7 +27,6 @@ class Index extends BaseController
             $split = '';
             $register = 'Hello,'.$username;
         }
-
         if($mid_page_title == '最新发布')
         {
             $postList = Artical::order('publish_time','desc')->paginate(5);
@@ -35,8 +35,16 @@ class Index extends BaseController
             $tag = substr($mid_page_title, 0, 6);
             $postList = Artical::where('category',$tag)
                                 ->order('publish_time', 'desc')->paginate(5);
+        }else if($mid_page_title == '收藏博文') {
+            if (!$username) {
+                echo "<script> alert('请先登录！'); </script>";
+                echo "<meta http-equiv='Refresh' content='1;URL=http://localhost:8000/login/index'>";
+            } else {
+                $postList = Artical::where('artical_id', 'IN', function ($q) {
+                    $q->table('star')->where('user_id', User::Where('username', Session::get('username'))->find()->user_id)->field('text_id');
+                })->paginate(5);
+            }
         }
-
         if(count($postList))
         {
             foreach($postList as $key=>$obj)

@@ -20,4 +20,8 @@ class User extends Model
         return $this->hasMany(Artical::class,'author_id');
     }
 
+    public function star()
+    {
+        return $this->hasMany(Star::class,'user_id');
+    }
 }

@@ -3,10 +3,12 @@
 namespace app\controller;
 
 use app\BaseController;
+use app\model\Star;
 use think\facade\View;
 use think\facade\Session;
 use app\model\User;
 use app\model\Info;
+use app\model\Artical;
 use think\facade\Request;
 use think\response\Redirect;
 
@@ -33,6 +35,14 @@ class Home extends BaseController
             }
 
             $textList = $query->artical()->order('publish_time','desc')->select();
+            $starList1 = $query->star()->order('star_time', 'desc')->select();
+            $starList2 = array();
+            foreach($starList1 as $key=>$obj)
+            {
+                $query = Artical::find($obj->text_id);
+                Array_push($starList2, $query);
+            }
+
 
             $nav_alt = '欢迎回来, '.$username;
             $logout = '退出登录';
@@ -49,13 +59,30 @@ class Home extends BaseController
             'school'        =>      $school,
             'major'         =>      $major,
             'selfIntro'     =>      $selfIntro,
-            'textList'      =>      $textList
+            'textList'      =>      $textList,
+            'starList'      =>      $starList2
 
         ]);
     }
 
 
-    function editAvatar ()
+    //取消收藏
+    function unStar($textId)
+    {
+        $username = Session::get('username');
+        $userId = User::where('username', $username)->find()->user_id;
+        $query = Star::where('user_id', $userId)
+                        ->where('text_id', $textId)->find();
+        $query->delete();
+
+        $queryText = Artical::find($textId);
+        --$queryText->star_count;
+        $queryText->save();
+
+        return redirect('http://localhost:8000/home/index');
+    }
+
+    function editAvatar()
     {
         $username = Session::get('username');
         $file = request()->file('edit_avatar');
