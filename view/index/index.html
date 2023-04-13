@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    <script src="https://kit.fontawesome.com/ce068ac145.js" crossorigin="anonymous"></script>
+    <script>
+        /*编写分类二级菜单的折叠效果
+        思路：初始化先隐藏起来，再编写折叠函数
+        调用函数要使用onload="", onclick=""
+        */
+        function display(str) {
+            var flag1 = document.getElementById(str);
+            var flag2 = flag1.style.display;
+            flag1.style.display = (flag2 == "none"? "block":"none");
+        }
+    </script>
+    <style>
+        .parant {
+            display: flex;
+            flex-direction: column;
+            font-size: large;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: white;
+        }
+        /*顶部导航栏样式*/
+        .header {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            height: 45px;
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            margin-bottom: 20px;
+            color: greenyellow;
+            background-color: green;
+        }
+        #nav_top_title {
+            position: relative;
+            top: -30px;
+            left: 10px;
+            letter-spacing: 27px;
+            text-align: left;
+            font-size: xx-large;
+            font-weight: bolder;
+            font-family: LiSu;
+        }
+        .nav_top_search {
+            margin-top: 12px;
+        }
+        .nav_top_search button{
+            background-color: #999;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 4px;
+            cursor: pointer;
+        }
+        .nav_top_right {
+            margin-top: 10px;
+        }
+        .nav_top_right ul {
+            list-style-type: none;
+            margin: 0;
+        }
+        .nav_top_right li{
+            float: right;
+        }
+        .nav_top_right a{
+            text-decoration: none;
+            padding: 13px 15px 12px 15px;
+            color: white;
+            transition: background-color 0.25s;
+        }
+        .nav_top_right a:hover {
+            background-color: darkgrey;
+        }
+    
+        /*中间三大块：左边导航栏 中间核心内容 右边推荐榜*/
+        .main_body {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    
+        /*左边导航栏*/
+        .sidenav {
+            padding-left: 40px;
+            padding-right: 40px;
+            background-color: #F5F5F5;
+            width: 15%;
+        }
+        #sidenav_ul {
+            display: flex;
+            flex-direction: column;
+            list-style-type: none;
+            width: 100%;
+        }
+    
+        #sidenav_li {
+            padding-top: 40px;
+            padding-right: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #sidenav_item {
+            text-decoration: none;
+        }
+
+        #sidenav_item span{
+            color: #A9A9A9;
+            margin-left: 10px;
+        }
+
+        .fa-cubes, 
+        .fa-thumbs-up,
+        .fa-message,
+        .fa-star,
+        .fa-comment-dots,
+        .fa-eye{
+            color: #808080;
+        }
+
+        /*中间主要部分*/
+        .main_flow {
+            margin-left: 30px;
+            width: 85%;
+            position: relative;
+        }
+    
+        .mid_page {
+            width: 100%;
+        }
+
+        .mid_page_title  {
+            text-align: left;
+        }
+        
+        .mid_page_title a{
+            text-decoration: none;
+            font-size: 14px;
+            color: #808080;
+        }
+
+    
+        .post_item {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f6f6f6;
+            margin-top: 16px;
+            margin-bottom: 30px;
+            word-wrap: break-word;
+        }
+
+        .post_item_title {
+            text-decoration: none;
+            color: #333;
+            justify-content: left;
+            display: flex;
+            font-family: 'Verdana';
+        }
+
+        .post_item_body {
+            width: 50%;
+        }
+    
+        .post_item_summary {
+            margin-bottom: 7px;
+            margin-top: 17px;
+            font-weight: 400;
+            font-size: 14px;
+            max-height: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            line-height: 1.5;
+            display: flex;
+            justify-content: left;
+        }
+
+        /*文章摘要部分样式*/
+        .post_item_abstract{
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-weight: lighter;
+            margin-left: 8px;
+            font-family:'Georgia';
+        }
+
+        .post_item_author {
+            text-decoration: none;
+            color: #333;
+            font-style:oblique;
+            font-weight:bold;
+        }
+
+        .post_item_meta {
+            padding-left: 20px;
+        }
+
+        .post_item_meta_btn {
+            text-decoration: none;
+            padding-left: 20px;
+        }
+
+        .post_item_meta_btn span{
+            color: #222;
+        }
+
+        .post_item_foot {
+            font-size: 14px;
+            margin-left: 0;
+            justify-content: space-between;
+            width: 100%;
+            display: inline-flex;
+            background-color: #FFFFF0;
+        }
+        /*隐藏分类栏*/
+        #site_categories_wrapper {
+            width: 50%;
+            display: none;
+            position: absolute;
+            top: 33px;
+            left: -29px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px 1px rgba(200,200,200,.5);
+        }
+    
+        #site_categories_card li{
+            list-style-type: none;
+            display: inline;
+            padding: 0 20px 0 20px;
+        }
+    
+        #site_categories_card a{
+            text-decoration: none;
+            color: #808080;
+        }
+
+        /*页码样式*/
+        .pagination {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .pagination li {
+            padding: 20px;
+            display: inline-block;
+        }
+
+        .pagination a {
+            color: #3CB371;
+        }
+
+        /*底部位置*/
+        .footer_footer {
+            background-color: #F3F3F3;
+            padding-top: 40px;
+            font-size: 13px;
+            color: #999;
+        }
+
+        .friend_link a {
+            text-decoration: none;
+            color: #3CB371;
+            padding: 5px 5px;
+        }
+        .friend_link a:hover {
+            color: #2E8B57;
+        }
+    </style>
+</head>
+<body class="parant">
+    <div class="header">
+        <div class="nav_top_left">
+            <p id="nav_top_title">中南民大校园博客平台<p>
+        </div>
+        <div class="nav_top_search">
+            <form>
+                <input type="search" placeholder="搜索">
+                <button type="submit"><i class="fa-solid fa-magnifying-glass magnify"></i></button>
+            </form>
+        </div>
+        <div class="nav_top_right">
+            <nav>
+                <ul>
+                    <li><a href="http://localhost:8000/register/index">{$register}</a></li>
+                    <li>{$split}</li>
+                    <li><a href="http://localhost:8000/login/index">{$login}</a></li>
+                    <li><a href="http://localhost:8000/home/index">个人中心</a></li>
+                    <li><a href="http://localhost:8000/index/index">主页</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="main_body">
+        <div class="sidenav">
+            <ul id="sidenav_ul">
+                <li id="sidenav_li">
+                    <a id="sidenav_item" onclick="display('site_categories_wrapper')">
+                        <i class="fa-solid fa-cubes"></i>
+                        <span>分类</span>
+                    </a>
+                </li>
+                <li id="sidenav_li">
+                    <a id="sidenav_item" href="http://localhost:8000/index/index/$mid_page_title/我赞博文">
+                        <i class="fa-solid fa-thumbs-up"></i><span>我赞</span>
+                    </a>
+                </li>
+                <li id="sidenav_li">
+                    <a id="sidenav_item" href="http://localhost:8000/index/index/$mid_page_title/我评博文">
+                        <i class="fa-solid fa-message"></i><span>我评</span>
+                    </a>
+                </li>
+                <li id="sidenav_li">
+                    <a id="sidenav_item" href="http://localhost:8000/index/index/$mid_page_title/收藏博文">
+                        <i class="fa-solid fa-star"></i><span>收藏</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="main_flow">
+            <div class="mid_page">
+                <div class="mid_page_title">
+                    <a href="#nowhere">{$mid_page_title}</a>
+                </div>
+                {$postList|raw}
+                <div class="post_list">
+                    {if !count($postList)}
+                        <div>
+                            <p>对不起，该区暂无该文章</p>
+                        </div>
+                    {else/}
+                        {foreach $postList as $key=>$obj}
+                            <article class="post_item">
+                                <section class="post_item_body">
+                                    <div class="post_item_text">
+                                        <a class="post_item_title" href="http://localhost:8000/artical/textLook/textId/{$obj->artical_id}">☛{$obj->title}☚</a>
+                                        <div class="post_item_summary">
+                                            <div>
+                                                <a href="http://localhost:8000/home/others/authorName/{$obj->category}">
+                                                    <img src="http://localhost:8000/static/images/{$obj->category}.jpg" alt="博主头像" width="50" height="50">
+                                                </a>
+                                            </div>
+                                            <div class="post_item_abstract">
+                                            {$obj->content|raw}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <footer class="post_item_foot">
+                                        <a class="post_item_author" href="http://localhost:8000/home/others/authorName/{$obj->category}">
+                                            <span>{$obj->category}</span>
+                                        </a>
+                                        <span class="post_item_meta">
+                                            <span>{$obj->publish_time}</span>
+                                        </span>
+                                        <a class="post_item_meta_btn" href="javascript:void(0)" onclick="">
+                                            <i class="fa-regular fa-thumbs-up"></i>
+                                            <span>{$obj->dig_count}</span>
+                                        </a>
+                                        <a class="post_item_meta_btn" href="http://localhost:8000/artical/textLook/textId/{$obj->artical_id}/tag/#commentList">
+                                            <i class="fa-regular fa-comment-dots"></i>
+                                            <span>{$obj->comment_count}</span>
+                                        </a>
+                                        <a class="post_item_meta_btn" href="http://localhost:8000/artical/textLook/textId/{$obj->artical_id}">
+                                            <i class="fa-regular fa-eye"></i>
+                                            <span>{$obj->look_count}</span>
+                                        </a>
+                                    </footer>
+                                </section>
+                            </article>
+                        {/foreach}
+                    {/if}
+                </div>
+                {$postList|raw}
+            </div>
+            <div id="site_categories_wrapper">
+                <div id="site_categories_card">
+                    <ul>
+                        <li><a href="http://localhost:8000/index/index/mid_page_title/科技区博文">科技</a></li>
+                        <li><a href="http://localhost:8000/index/index/mid_page_title/生活区博文">生活</a></li>
+                        <li><a href="http://localhost:8000/index/index/mid_page_title/影视区博文">影视</a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="http://localhost:8000/index/index/mid_page_title/资讯区博文">资讯</a></li>
+                        <li><a href="http://localhost:8000/index/index/mid_page_title/美食区博文">美食</a></li>
+                        <li><a href="http://localhost:8000/index/index/mid_page_title/学习区博文">学习</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer_footer">
+        <div class="friend_link">
+            友情链接：
+            <a id="friend_link_item" href="https://www.baidu.com">百度</a>
+            <a id="friend_link_item" href="https://www.sina.com.cn/">新浪</a>
+            <a id="friend_link_item" href="https://www.cnblogs.com/">博客园</a>
+            <a id="friend_link_item" href="https://www.csdn.net/">CSDN</a>
+            <a id="friend_link_item" href="https://www.chinaz.com/">站长之家</a>
+        </div>
+        <br>
+        <div class="footer_contact">
+            联系电话: 15080823172&emsp;QQ邮箱: 1720939769@qq.com
+        </div>
+    </footer>
+</body>
+</html>

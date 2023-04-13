@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户个人页面</title>
+    <style>
+        /* 统一设置页面的字体和颜色 */
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        /* 导航栏样式 */
+        nav {
+            background-color: #3e8e41;
+            color: #fff;
+            padding: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #999999;
+        }
+
+        /* 个人资料样式 */
+        .profile {
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 30px;
+        }
+
+        .avatar img {
+            width: 100%;
+        }
+
+        .info h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .info p {
+            margin: 5px 0;
+        }
+
+        /* 文章列表样式 */
+        .articles {
+            margin: 30px 0;
+        }
+
+        .articles h2 {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .articles ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .articles li {
+            margin: 20px 0;
+        }
+
+        .articles a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .articles p {
+            margin: 5px 0;
+        }
+
+        /* 关注列表样式 */
+        .followers, .following {
+            margin: 30px 0;
+        }
+
+        .followers h2, .following h2 {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .followers ul, .following ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .followers li, .following li {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .followers img, .following img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 20px;
+        }
+
+        .followers span, .following span {
+            margin-left: 10px;
+        }
+
+        .followers a, .following a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 768px) {
+            .profile, .followers, .following {
+                flex-wrap: wrap;
+            }
+
+            .avatar {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+
+            .info {
+                flex-grow: 1;
+            }
+
+            .followers li, .following li {
+                flex-wrap: wrap;
+            }
+
+            .followers img, .following img {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="http://localhost:8000/index/index">主页</a></li>
+        </ul>
+    </nav>
+    <div class="profile">
+        <div class="avatar">
+            <img src="http://localhost:8000/static/images/{$authorName}.jpg" alt="用户头像">
+        </div>
+        <div class="info">
+            <h1>{$authorName}</h1>
+            <p>学号: {$authorStudentId}</p>
+            <p>创建时间: {$authorRegisterTime}</p>
+            <p>个人介绍: {$authorIntroduce}.</p>
+        </div>
+    </div>
+
+    <div class="articles">
+        <h2>◼TA的文章</h2>
+        <ul>
+            {if !$articalList}
+            <li><p>哦，TA一篇文章也没写</p></li>
+            {else/}
+                {foreach $articalList as $key=>$obj}
+                    <li>
+                        <a href="http://localhost:8000/artical/textLook/textId/{$obj->artical_id}">[{$obj->title}]</a>
+                        <p>标签分类: {$obj->category}</p>
+                        <p>发布于: {$obj->publish_time}</p>
+                    </li>
+                {/foreach}
+            {/if}
+        </ul>
+    </div>
+
+    <div class="followers">
+        <h2>◼TA的粉丝</h2>
+        <ul>
+            <li>
+                <a href="#">
+                    <img src="#1" alt="粉丝1头像">
+                    <span>粉丝1用户名</span>
+                    <span>粉丝数: 100</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="#2" alt="粉丝2头像">
+                    <span>粉丝2用户名</span>
+                    <span>粉丝数: 100</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="following">
+        <h2>◼TA的关注</h2>
+        <ul>
+            <li>
+                <a href="#">
+                    <img src="#3" alt="关注1头像">
+                    <span>关注1用户名</span>
+                    <span>粉丝数: 300</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="#4" alt="关注2头像">
+                    <span>关注2用户名</span>
+                    <span>粉丝数: 300</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

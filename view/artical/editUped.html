@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        body {
+            font-family: 'Arial';
+        }
+
+        h2 {
+            background-color: #3e8e41;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            padding-left: 10px;
+            border-radius: 5px;
+            color: #ffffff;
+        }
+
+        /* Write Article Styles */
+        .write-article label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .write-article input,
+        .write-article select,
+        .write-article textarea {
+            display: block;
+            margin-bottom: 20px;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .write-article textarea {
+            height: 150px;
+        }
+
+        .write-article button {
+            background-color: #888;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .write-article button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+<section class="write-article">
+    <h2>编辑文章</h2>
+        <form action="http://localhost:8000/artical/upload/flag/true/textId/{$textId}" method="post">
+            <label for="title">标题:</label>
+            <input type="text" id="title" name="title" value="{$title}" required>
+            <label for="content">正文:</label>
+            <textarea id="content" name="content" rows="20" required>{$content}</textarea>
+            <label for="category">分类:</label>
+            <select id="category" name="category">
+                {if $category == '科技'}
+                    <option value="科技" selected="selected">科技</option>
+                {else/}
+                    <option value="科技">科技</option>
+                {/if}
+
+                {if $category == '生活'}
+                <option value="生活" selected="selected">生活</option>
+                {else/}
+                <option value="生活">生活</option>
+                {/if}
+
+                {if $category == '影视'}
+                <option value="影视" selected="selected">影视</option>
+                {else/}
+                <option value="影视">影视</option>
+                {/if}
+
+                {if $category == '资讯'}
+                <option value="资讯" selected="selected">资讯</option>
+                {else/}
+                <option value="资讯">资讯</option>
+                {/if}
+
+                {if $category == '美食'}
+                <option value="美食" selected="selected">美食</option>
+                {else/}
+                <option value="美食">美食</option>
+                {/if}
+
+                {if $category == '学习'}
+                <option value="学习" selected="selected">学习</option>
+                {else/}
+                <option value="学习">学习</option>
+                {/if}
+            </select>
+            <button type="submit">发布</button>
+        </form>
+</section>
+
+</body>
+</html>

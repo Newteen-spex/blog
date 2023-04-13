@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <style type="text/css">
+      .login-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f2f2f2;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px #888;
+        font-family: Arial, sans-serif;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 30px;
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-size: 18px;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 95%;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        margin-bottom: 20px;
+      }
+
+      input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #3e8e41;
+      }
+  </style>
+<!--  <script>-->
+<!--    // 获取表单和输入框元素-->
+<!--    const form = document.querySelector('form');-->
+<!--    const usernameInput = document.querySelector('#username');-->
+<!--    const passwordInput = document.querySelector('#password');-->
+
+<!--    // 监听表单提交事件-->
+<!--    form.addEventListener('submit', (event) => {-->
+<!--      // 阻止默认表单提交行为-->
+<!--      event.preventDefault();-->
+
+<!--      // 获取输入框中的值-->
+<!--      const username = usernameInput.value.trim();-->
+<!--      const password = passwordInput.value.trim();-->
+
+<!--      // 在这里可以进行登录验证操作，比如发送登录请求到后台 API-->
+<!--      // 如果验证成功，则跳转到博客主页-->
+<!--      window.location.href = 'http://localhost:8000/index/index';-->
+<!--    });-->
+<!--  </script>-->
+</head>
+<body>
+  <div class="login-container">
+    <h1>博客登录</h1>
+    <form method="post" action="http://localhost:8000/login/verify">
+      <label for="username">用户名:</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">密码:</label>
+      <input type="password" id="password" name="password" required>
+
+      <input type="submit" value="登录">
+    </form>
+  </div>
+</body>
+</html>

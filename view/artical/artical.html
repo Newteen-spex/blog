@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文章标题</title>
+    <script>
+      function jump(pot){
+        document.querySelector(pot).scrollTo();
+      }
+    </script>
+    <style>
+      /* 全局样式 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background-color: #f2f2f2;
+        line-height: 1.5;
+      }
+
+      /* 导航栏 */
+      header {
+        background-color: #3e8e41;
+        color: #fff;
+        padding: 10px;
+      }
+
+      nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      nav li {
+        margin: 0 10px;
+      }
+
+      nav a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.2rem;
+      }
+
+      /* 文章部分 */
+      main {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      article {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      article header {
+        margin-bottom: 10px;
+      }
+
+      article h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+
+      article p {
+        margin-bottom: 10px;
+      }
+
+      #post-head  {
+        border-radius: 6px;
+      }
+
+      .post-content {
+        margin-bottom: 10px;
+      }
+
+      /* 标签 */
+      .tags {
+        margin-top: 10px;
+      }
+
+      .tags span {
+        color: #ffffff;
+        text-decoration: none;
+        background-color: #3e8e41;
+        border-radius: 2px;
+        padding: 3px 5px 3px 5px;
+      }
+
+      /* 按钮 */
+      #like-btn,
+      #submit-btn,
+      #star-btn {
+        background-color: #555555;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      #post-foot {
+        border-radius: 7px;
+      }
+
+      /* 页脚 */
+      footer {
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+      }
+
+      footer p {
+        margin: 0;
+        font-size: 0.8rem;
+      }
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      .name {
+        font-weight: bold;
+      }
+
+      .time {
+        color: #999;
+        font-size: 0.8em;
+      }
+
+      /*相关文章*/
+      aside a{
+        text-decoration: none;
+        color: #555555;
+      }
+    </style>
+</head>
+<body onload="jump({$tag})">
+  <header id="pageHead">
+    <nav>
+      <ul>
+        <li><a href="http://localhost:8000/index/index">主页</a></li>
+        {if $userId == $authorId}
+          <li><a href="http://localhost:8000/home/index">个人中心</a></li>
+        {else/}
+          <li><a href="http://localhost:8000/home/others/authorName/{$authorName}">了解作者</a></li>
+        {/if}
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <article>
+      <header id="post-head">
+        <h1>{$textTitle}</h1>
+        <p>〰{$authorName}&emsp;发布于&nbsp;[{$textTime}]</p>
+      </header>
+      <div class="post-content">
+        {$textContent|raw};
+      </div>
+      <footer id="post-foot">
+        <div class="tags">
+          <p>分类: <span>{$textTag}</span></p>
+        </div>
+      </footer>
+    </article>
+    <p>点赞数：<span id="like-count">{$textDig}</span>&emsp;
+        收藏数：<span id="star-count">{$textStar}</span>&emsp;
+        评论数：<span id="comment-count">{$textComment}</span>&emsp;
+        浏览数：<span id="look-count">{$textScan}</span></p>
+    <button id="like-btn">点赞</button>
+    <button id="submit-btn">关注作者</button>
+    <button id="star-btn">收藏文章</button>
+<!--    评论区-->
+    <form action="submit_comment.php" method="post">
+      <label for="comment">发表评论：</label><br>
+      <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br>
+      <input type="submit" value="提交">
+    </form>
+    <ul id="commentList">
+      <li>
+        <span class="name">用户名：</span>张三<br>
+        <span class="comment">评论内容</span><br>
+        <span class="time">2023-04-01 12:00:00</span>
+      </li>
+      <li>
+        <span class="name">用户名：</span>李四<br>
+        <span class="comment">评论内容</span><br>
+        <span class="time">2023-04-01 13:00:00</span>
+      </li>
+    </ul>
+    <aside>
+      <h2>◼相关文章</h2>
+      <ul>
+        {if !count($closeText)}
+          <li><p>暂无更多文章</p></li>
+        {else/}
+          {foreach $closeText as $key=>$obj}
+            <li><a href="http://localhost:8000/artical/textLook/textId/{$obj->artical_id}">▪{$obj->title}</a></li>
+          {/foreach}
+        {/if}
+      </ul>
+    </aside>
+  </main>
+  <footer>
+    <p>Copyright © 2023</p>
+  </footer>
+</body>
+</html>

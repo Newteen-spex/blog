@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <script>
+        function display(str){
+            var flag1 = document.getElementById(str);
+            var flag2 = flag1.style.display;
+            flag1.style.display = (flag2 == "none"? "block":"none");
+        }
+    </script>
+    <style>
+        /* Colors */
+        :root {
+            --primary-color: #333;
+            --secondary-color: #f1f1f1;
+        }
+
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #3e8e41;
+            color: #fff;
+            padding: 10px 20px;
+        }
+
+        .navbar ul {
+            display: flex;
+            justify-content: flex-end;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar li {
+            margin-left: 10px;
+        }
+
+        .navbar a {
+            color: #fff;
+        }
+
+        /*编辑头像*/
+        #avatar_edit {
+            display: none;
+            position: absolute;
+            top: 33px;
+            left: 19px;
+            background-color: #C0C0C0;
+            border-radius: 5px;
+            padding: 10px 10px 10px 10px;
+            box-shadow: 0 2px 4px 1px rgba(200,200,200,.5);
+        }
+
+        /* Personal Info Styles */
+        .personal-info label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .personal-info input,
+        .personal-info select {
+            display: block;
+            margin-bottom: 20px;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .personal-info button {
+            background-color: #888;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .personal-info button:hover {
+            background-color: #555;
+        }
+
+        /* Write Article Styles */
+        .write-article label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .write-article input,
+        .write-article select,
+        .write-article textarea {
+            display: block;
+            margin-bottom: 20px;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .write-article textarea {
+            height: 150px;
+        }
+
+        .write-article button {
+            background-color: #888;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .write-article button:hover {
+            background-color: #555;
+        }
+
+        /* My Articles Styles */
+        .my-articles li {
+            border: 1px solid #eee;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .my-articles li:hover {
+            background-color: #f1f1f1;
+        }
+
+        .my-articles a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .my-articles h3 {
+            margin-bottom: 5px;
+        }
+
+        .my-articles p {
+            margin-bottom: 5px;
+        }
+
+        .article-buttons button{
+            background-color: #888;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .article-buttons button:hover {
+            background-color: #555;
+        }
+
+        /* Bookmarks Styles */
+        .my-bookmarks li {
+            border: 1px solid var(--secondary-color);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .my-bookmarks li:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .bookmark-buttons button {
+            background-color: #888;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .bookmark-buttons button:hover {
+            background-color: #555;
+        }
+
+        /* Following Styles */
+        .my-following li {
+            border: 1px solid #eee;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .my-following li:hover {
+            background-color: #f1f1f1;
+        }
+
+        .follow-buttons button {
+            background-color: #888;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .follow-buttons button:hover {
+            background-color: #555;
+        }
+
+        /* Follower Styles */
+        .my-follower li {
+            border: 1px solid #eee;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .my-follower li:hover {
+            background-color: #f1f1f1;
+        }
+
+        img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="avatar_edit">
+            <form action="http://localhost:8000/home/editAvatar" method="post" enctype="multipart/form-data">
+                <input type="file" name="edit_avatar" required><br><br>
+                <input type="submit" value="提交">
+            </form>
+        </div>
+        <div class="welcome-message">
+            <img src="../static/images/{$avatar}" alt="编辑头像" class="avatar" onclick="display('avatar_edit')">
+            <p>{$nav_alt}</p>
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="http://localhost:8000/index/index">主页</a></li>&emsp;
+                <li><a href="http://localhost:8000/home/logout">{$logout}</a></li>
+<!--                <li><a href="path/to/articles">Articles</a></li>-->
+<!--                <li><a href="path/to/profile">Profile</a></li>-->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="personal-info">
+            <h2>个人信息</h2>
+            <form action="http://localhost:8000/home/updateInfo" method="post">
+                <label for="username">用户名:</label>
+                <input type="text" id="username" name="username" value="{$userName}" disabled>
+                <label for="email">电子邮件:</label>
+                <input type="email" id="email" name="email" value="{$email}" required>
+                <label for="id_number">学号:</label>
+                <input type="text" id="id_number" name="id_number" value="{$idNumber}">
+                <label for="school">学校:</label>
+                <input type="text" id="school" name="school" value="{$school}">
+                <label for="major">专业:</label>
+                <input type="text" id="major" name="major" value="{$major}">
+                <label for="self_intro">个人介绍:</label>
+                <input type="text" id="self_intro" name="self_intro" value="{$selfIntro}">
+                <button type="submit">更新</button>
+            </form>
+        </section>
+
+        <section class="write-article">
+            <h2>写文章</h2>
+            <form action="http://localhost:8000/artical/upload" method="post">
+                <label for="title">标题:</label>
+                <input type="text" id="title" name="title" required>
+                <label for="content">正文:</label>
+                <textarea id="content" name="content" rows="10" required></textarea>
+                <label for="category">分类:</label>
+                <select id="category" name="category">
+                    <option value="科技">科技</option>
+                    <option value="生活">生活</option>
+                    <option value="影视">影视</option>
+                    <option value="资讯">资讯</option>
+                    <option value="美食">美食</option>
+                    <option value="学习">学习</option>
+                </select>
+                <button type="submit">发布</button>
+            </form>
+        </section>
+
+        <section class="my-articles">
+            <h2>我的文章</h2>
+            <ul>
+                {if !count($textList)}
+                    <li>
+                        <p>你还没发布过文章，赶紧写一篇吧！</p>
+                    </li>
+                {else/}
+                    {foreach $textList as $key=>$obj}
+                        <li>
+                            <a href="http://localhost:8000/artical/textLook/textId/{$obj->artical_id}">
+                                <h3>{$obj->title}</h3>
+                                <p>发布于 [{$obj->publish_time}]</p>
+                                <p>[👀]{$obj->look_count}&emsp;[👍]{$obj->dig_count}&emsp;[💬]{$obj->comment_count}</p>
+                            </a>
+                            <div class="article-buttons">
+                                <a href="http://localhost:8000/artical/edit/textId/{$obj->artical_id}"><button>编辑</button></a>
+                                <a href="http://localhost:8000/artical/delete/textId/{$obj->artical_id}"><button>删除</button></a>
+                            </div>
+                        </li>
+                    {/foreach}
+                {/if}
+                <!-- Repeat for each article -->
+            </ul>
+        </section>
+
+        <section class="my-bookmarks">
+            <h2>我的收藏</h2>
+            <ul>
+                <li>
+                    <a href="path/to/bookmarked-article">
+                        <h3>文章标题</h3>
+                        <p>收藏于 [收藏日期]</p>
+                    </a>
+                    <div class="bookmark-buttons">
+                        <button>取消收藏</button>
+                    </div>
+                </li>
+                <!-- Repeat for each bookmarked article -->
+            </ul>
+        </section>
+
+        <section class="my-following">
+            <h2>我的关注</h2>
+            <ul>
+                <li>
+                    <a href="path/to/followed-user">
+                        <img src="path/to/avatar.png" alt="博友头像">
+                        <h3>用户名</h3>
+                    </a>
+                    <div class="follow-buttons">
+                        <button>取消关注</button>
+                    </div>
+                </li>
+                <!-- Repeat for each followed user -->
+            </ul>
+        </section>
+
+        <section class="my-follower">
+            <h2>我的粉丝</h2>
+            <ul>
+                <li>
+                    <a href="path/to/follower-user">
+                        <img src="path/to/avatar.png" alt="粉丝头像">
+                        <h3>用户名</h3>
+                    </a>
+                </li>
+                <!-- Repeat for each followed user -->
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
