@@ -401,29 +401,39 @@
         <section class="my-following">
             <h2>我的关注</h2>
             <ul>
-                <li>
-                    <a href="path/to/followed-user">
-                        <img src="path/to/avatar.png" alt="博友头像">
-                        <h3>用户名</h3>
-                    </a>
-                    <div class="follow-buttons">
-                        <button>取消关注</button>
-                    </div>
-                </li>
-                <!-- Repeat for each followed user -->
+                {if !count($mySubcribes)}
+                    <li><p>您还没有关注的人哦，快去找找看吧</p></li>
+                {else/}
+                    {foreach $mySubcribes as $key=>$obj}
+                        <li>
+                            <a href="http://localhost:8000/home/others/authorName/{$obj->username}">
+                                <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="博友头像">
+                                <h3>{$obj->username}</h3>
+                            </a>
+                            <div class="follow-buttons">
+                                <a href="http://localhost:8000/home/unSubcribe/idolId/{$obj->user_id}"><button>取消关注</button></a>
+                            </div>
+                        </li>
+                    {/foreach}
+                {/if}
             </ul>
         </section>
 
         <section class="my-follower">
             <h2>我的粉丝</h2>
             <ul>
-                <li>
-                    <a href="path/to/follower-user">
-                        <img src="path/to/avatar.png" alt="粉丝头像">
-                        <h3>用户名</h3>
-                    </a>
-                </li>
-                <!-- Repeat for each followed user -->
+                {if !count($myFollowers)}
+                    <li><p>您还没有粉丝哦，抓紧发布优质文章吧！</p></li>
+                {else/}
+                    {foreach $myFollowers as $key=>$obj}
+                        <li>
+                            <a href="http://localhost:8000/home/others/authorName/{$obj->username}">
+                                <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="粉丝头像">
+                                <h3>{$obj->username}</h3>
+                            </a>
+                        </li>
+                    {/foreach}
+                {/if}
             </ul>
         </section>
     </main>

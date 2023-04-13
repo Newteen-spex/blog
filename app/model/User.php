@@ -24,4 +24,14 @@ class User extends Model
     {
         return $this->hasMany(Star::class,'user_id');
     }
+
+    public function followers()
+    {
+        return $this->hasMany(Subcribe::class,'subed_id');
+    }
+
+    public function Subcribes()
+    {
+        return $this->hasMany(Subcribe::class,'sub_id');
+    }
 }

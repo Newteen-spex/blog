@@ -3,7 +3,9 @@
 namespace app\controller;
 
 use app\BaseController;
+use app\model\Dig;
 use app\model\Star;
+use app\model\Subcribe;
 use think\facade\Session;
 use think\facade\View;
 use think\facade\Request;
@@ -16,6 +18,33 @@ class Artical extends BaseController
     function index()
     {
         return View::fetch('artical');
+    }
+
+    //关注作者(文章主页)
+    function subcribe($textAuthorId, $textId)
+    {
+        $username = Session::get('username');
+        if(!$username)
+        {
+            echo "<script> alert('请先登录！'); </script>";
+            echo "<meta http-equiv='Refresh' content='0.5;URL=http://localhost:8000/login/index'>";
+        }else
+        {
+            $userId = User::where('username', $username)->find()->user_id;
+            $subQuery = Subcribe::where('sub_id', $userId)->where('subed_id', $textAuthorId)->find();
+            if(!$subQuery)
+            {
+                Subcribe::create([
+                    'sub_id'    =>    $userId,
+                    'subed_id'  =>    $textAuthorId,
+                    'sub_time'  =>    date('y-m-d h:i:s')
+                ]);
+                echo "<script> alert('关注成功！'); </script>";
+            }else {
+                echo "<script> alert('您已关注该作者！'); </script>";
+            }
+        }
+        echo "<meta http-equiv='Refresh' content='0.5;URL=http://localhost:8000/artical/textLook/textId/".$textId."'>";
     }
 
     function upload($flag = false, $textId = null)
@@ -78,6 +107,79 @@ class Artical extends BaseController
         }
     }
 
+    //点赞文章(主页点赞按钮处理)
+    function digText($textId)
+    {
+
+        $username = Session::get('username');
+        if(!$username)
+        {
+            echo "<script>alert('请先登录！');</script>";
+            echo "<meta http-equiv='Refresh' content='0.5;URL=http://localhost:8000/login/index'>";
+        }else
+        {
+            $userId = User::where('username', $username)->find()->user_id;
+            //点赞之前要判断是否存在用户有点赞此篇文章的记录
+            $digQuery = Dig::where('user_id', $userId)->where('text_id', $textId)->find();
+            if(!$digQuery)
+            {
+                //收藏文章涉及Artical表和Star表
+                $text = ArticalModel::find($textId);
+                ++$text->dig_count;
+                $text->save();
+
+                Dig::create([
+                    'user_id'       =>      $userId,
+                    'text_id'       =>      $textId,
+                    'dig_time'   =>     date('y-m-d h:i:s')
+                ]);
+                echo "<script> alert('点赞成功！'); </script>";
+            }else
+            {
+                echo "<script> alert('您已点赞过该文章！'); </script>";
+            }
+            echo "<meta http-equiv='Refresh' content='0.1;URL=http://localhost:8000/index/index'>";
+        }
+
+    }
+
+    //点赞文章（文章页点赞按钮处理）
+    function digArtical($textId, $digFlag)
+    {
+        $username = Session::get('username');
+        if(!$username)
+        {
+            return \redirect('http://localhost:8000/login/index');
+        }else
+        {
+            $userId = User::where('username', $username)->find()->user_id;
+            $digQuery = Dig::where('user_id', $userId)->where('text_id', $textId)->find();
+            if($digFlag == '点赞')
+            {
+                $text = ArticalModel::find($textId);
+                ++$text->dig_count;
+                $text->save();
+
+                Dig::create([
+                    'user_id'       =>      $userId,
+                    'text_id'       =>      $textId,
+                    'dig_time'   =>     date('y-m-d h:i:s')
+                ]);
+                echo "<script> alert('点赞成功！'); </script>";
+            }else if($digFlag == '取消点赞')
+            {
+                $digQuery->delete();
+
+                $queryText = \app\model\Artical::find($textId);
+                --$queryText->dig_count;
+                $queryText->save();
+
+                echo "<script> alert('已取消点赞！'); </script>";
+            }
+            echo "<meta http-equiv='Refresh' content='0.5;URL=http://localhost:8000/artical/textLook/textId/".$textId."'>";
+        }
+    }
+
     //编辑文章
     function edit($textId)
     {
@@ -110,6 +212,11 @@ class Artical extends BaseController
 
     function textLook($textId, $tag = '#pageHead', $star = false)
     {
+        //浏览次数加一
+        $look = ArticalModel::find($textId);
+        ++$look->look_count;
+        $look->save();
+
         //主要用于改变右上角样式
         if(Session::get('username'))
         {
@@ -119,6 +226,13 @@ class Artical extends BaseController
         }else
         {
             $userId = -1;
+        }
+
+        $digQuery = Dig::where('user_id', $userId)->where('text_id', $textId)->find();
+        if(!$digQuery){
+            $digStatus = '点赞';
+        }else{
+            $digStatus = '取消点赞';
         }
 
         //点击收藏按钮判断
@@ -178,7 +292,8 @@ class Artical extends BaseController
             'textScan'      =>          $textScan,
             'tag'           =>          $tag,
             'closeText'     =>          $closeText,
-            'textId'        =>          $textId
+            'textId'        =>          $textId,
+            'digStatus'     =>          $digStatus
         ]);
     }
 }

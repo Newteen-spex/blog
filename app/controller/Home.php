@@ -4,6 +4,8 @@ namespace app\controller;
 
 use app\BaseController;
 use app\model\Star;
+use app\model\Subcribe;
+use think\db\Where;
 use think\facade\View;
 use think\facade\Session;
 use app\model\User;
@@ -43,6 +45,16 @@ class Home extends BaseController
                 Array_push($starList2, $query);
             }
 
+            //我的关注列表
+            $mySubcribes = User::where('user_id', 'IN', function ($q){
+                    $q->table('subcribe')->where('sub_id', User::where('username', Session::get('username'))->find()->user_id)->field('subed_id');
+            })->select();
+
+            //我的粉丝列表
+            $myFollowers = User::where('user_id', 'IN', function ($q){
+                $q->table('subcribe')->where('subed_id', User::where('username', Session::get('username'))->find()->user_id)->field('sub_id');
+            })->select();
+
 
             $nav_alt = '欢迎回来, '.$username;
             $logout = '退出登录';
@@ -60,11 +72,23 @@ class Home extends BaseController
             'major'         =>      $major,
             'selfIntro'     =>      $selfIntro,
             'textList'      =>      $textList,
-            'starList'      =>      $starList2
+            'starList'      =>      $starList2,
+            'mySubcribes'   =>      $mySubcribes,
+            'myFollowers'   =>      $myFollowers
 
         ]);
     }
 
+    //取消关注
+    function unSubcribe($idolId)
+    {
+        $username = Session::get('username');
+        $userId = User::where('username', $username)->find()->user_id;
+        $query = Subcribe::where('sub_id', $userId)->where('subed_id', $idolId);
+        $query->delete();
+        echo "<script> alert('已成功取消关注！'); </script>";
+        echo "<meta http-equiv='Refresh' content='0.5;URL=http://localhost:8000/home/index'>";
+    }
 
     //取消收藏
     function unStar($textId)
@@ -79,7 +103,8 @@ class Home extends BaseController
         --$queryText->star_count;
         $queryText->save();
 
-        return redirect('http://localhost:8000/home/index');
+        echo "<script> alert('已取消收藏！'); </script>";
+        echo "<meta http-equiv='Refresh' content='0.5;URL=http://localhost:8000/home/index'>";
     }
 
     function editAvatar()
@@ -101,6 +126,7 @@ class Home extends BaseController
 
     function others($authorName)
     {
+        Session::set('othersName', $authorName);
         if($authorName == Session::get('username'))
         {
             return redirect('http://localhost:8000/home/index');
@@ -109,16 +135,31 @@ class Home extends BaseController
             $authorStudentId = $query->student_id;
             $authorRegisterTime = $query->create_time;
             $infoQuery = $query->info()->find();
-            $authorIntroduce = $infoQuery->introduce;
+            if($infoQuery){
+                $authorIntroduce = $infoQuery->introduce;
+            }else{
+                $authorIntroduce = '该用户暂无个人介绍';
+            }
             $articalList = $query->artical()->order('publish_time', 'desc')->select();
 
+            //关注列表
+            $subcribes = User::where('user_id', 'IN', function ($q){
+                $q->table('subcribe')->where('sub_id', User::where('username', Session::get('othersName'))->find()->user_id)->field('subed_id');
+            })->select();
+
+            //粉丝列表
+            $followers = User::where('user_id', 'IN', function ($q){
+                $q->table('subcribe')->where('subed_id', User::where('username', Session::get('othersName'))->find()->user_id)->field('sub_id');
+            })->select();
 
             return View::fetch('others', [
                 'authorName'       =>       $authorName,
                 'authorStudentId'  =>       $authorStudentId,
                 'authorRegisterTime'    =>  $authorRegisterTime,
                 'authorIntroduce'  =>       $authorIntroduce,
-                'articalList'      =>       $articalList
+                'articalList'      =>       $articalList,
+                'subcribes'        =>       $subcribes,
+                'followers'        =>       $followers
             ]);
         }
 

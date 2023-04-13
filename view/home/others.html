@@ -201,40 +201,36 @@
     <div class="followers">
         <h2>◼TA的粉丝</h2>
         <ul>
-            <li>
-                <a href="#">
-                    <img src="#1" alt="粉丝1头像">
-                    <span>粉丝1用户名</span>
-                    <span>粉丝数: 100</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="#2" alt="粉丝2头像">
-                    <span>粉丝2用户名</span>
-                    <span>粉丝数: 100</span>
-                </a>
-            </li>
+            {if !count($followers)}
+                <li><p>该用户暂时还没有粉丝哦</p></li>
+            {else/}
+                {foreach $followers as $key=>$obj}
+                    <li>
+                        <a href="http://localhost:8000/home/others/authorName/{$obj->username}">
+                            <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="粉丝头像">
+                            <span>{$obj->username}</span>
+                        </a>
+                    </li>
+                {/foreach}
+            {/if}
         </ul>
     </div>
 
     <div class="following">
         <h2>◼TA的关注</h2>
         <ul>
-            <li>
-                <a href="#">
-                    <img src="#3" alt="关注1头像">
-                    <span>关注1用户名</span>
-                    <span>粉丝数: 300</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="#4" alt="关注2头像">
-                    <span>关注2用户名</span>
-                    <span>粉丝数: 300</span>
-                </a>
-            </li>
+            {if !count($subcribes)}
+                <li><p>该用户暂时还没有关注他人哦</p></li>
+            {else/}
+                {foreach $subcribes as $key=>$obj}
+                    <li>
+                        <a href="http://localhost:8000/home/others/authorName/{$obj->username}">
+                            <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="博友头像">
+                            <span>{$obj->username}</span>
+                        </a>
+                    </li>
+                {/foreach}
+            {/if}
         </ul>
     </div>
 </body>
