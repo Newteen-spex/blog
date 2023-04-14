@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <style type="text/css">
+        .login-container{
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px #888;
+            font-family: Arial, sans-serif;
+        }
+
+        #swlink {
+            text-decoration: none;
+            color: #888;
+        }
+
+        #switch {
+            cursor: pointer;
+            font-size: small;
+            font-family:'Microsoft YaHei';
+            margin-left: 80%;
+        }
+        #switch:hover {
+            color: #4CAF50;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 95%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <a href="http://localhost:8000/login/index" id="swlink"><span id="switch">用户名登录<span></a>
+        <h1>博客登录</h1>
+        <form method="post" action="http://localhost:8000/login/verifyStudentId">
+            <label for="studentId">学号:</label>
+            <input type="text" id="studentId" name="studentId" required>
+
+            <label for="password">密码:</label>
+            <input type="password" id="password" name="password" required>
+
+            <input type="submit" value="登录">
+        </form>
+    </div>
+</body>
+</html>

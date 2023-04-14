@@ -17,14 +17,46 @@ class Register extends BaseController
 
     function insert()
     {
-        User::create([
-            'username'      =>      Request::post('username'),
-            'passcode'      =>      Request::post('password'),
-            'email'         =>      Request::post('email'),
-            'student_id'    =>      Request::post('id_card'),
-            'realname'      =>      Request::post('real_name')
-        ]);
-        echo "<script> alert('注册成功！确认后返回主页面'); </script>";
-        echo "<meta http-equiv='Refresh' content='1;URL=http://localhost:8000/index/index'>";
+        $username = Request::post('username');
+        $passcode = Request::post('password');
+        $confirmPasscode = Request::post('confirm_password');
+        $email = Request::post('email');
+        $studentId = Request::post('id_card');
+        $realName = Request::post('real_name');
+
+        //确认密码的一致
+        if($passcode != $confirmPasscode){
+            echo "<script> alert('两次密码输入不一致！'); </script>";
+            echo "<meta http-equiv='Refresh' content='1;URL=http://localhost:8000/register/index'>";
+            return;
+        }
+
+        //保证用户名唯一
+        $userNameQuery = User::where('username', $username)->find();
+        if($userNameQuery){
+            echo "<script> alert('用户名已被注册！'); </script>";
+            echo "<meta http-equiv='Refresh' content='1;URL=http://localhost:8000/register/index'>";
+            return;
+        }
+
+        //保证学号唯一
+        $IdQuery = User::where('student_id', $studentId)->find();
+        if($IdQuery){
+            echo "<script> alert('学号已被注册！'); </script>";
+            echo "<meta http-equiv='Refresh' content='1;URL=http://localhost:8000/register/index'>";
+            return;
+        }
+
+        if(!$userNameQuery && !$IdQuery){
+            User::create([
+                'username'      =>      $username,
+                'passcode'      =>      $passcode,
+                'email'         =>      $email,
+                'student_id'    =>      $studentId,
+                'realname'      =>      $realName
+            ]);
+            echo "<script> alert('注册成功！确认后返回主页面'); </script>";
+            echo "<meta http-equiv='Refresh' content='1;URL=http://localhost:8000/index/index'>";
+        }
     }
 }
