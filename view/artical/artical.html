@@ -113,6 +113,21 @@
         border-radius: 7px;
       }
 
+      /*评论区样式*/
+      #commentList {
+        margin-top: 10px;
+        margin-bottom: 18px;
+      }
+      #commentList li {
+        border-bottom: 1px solid #F0FFF0;
+      }
+      #btn-submit {
+        border: none;
+        cursor: pointer ;
+        width: 26px;
+        height: 26px;
+      }
+
       /* 页脚 */
       footer {
         background-color: #4CAF50;
@@ -188,22 +203,27 @@
     <a href="http://localhost:8000/artical/subcribe/textAuthorId/{$authorId}/textId/{$textId}"><button id="submit-btn">关注作者</button></a>
     <a href="http://localhost:8000/artical/textLook/textId/{$textId}/star/true"><button id="star-btn">收藏文章</button></a>
 <!--    评论区-->
-    <form action="submit_comment.php" method="post">
+    <br><br>
+    <h2>◼评论</h2>
+    <form action="http://localhost:8000/artical/upComment/textId/{$textId}" method="post">
       <label for="comment">发表评论：</label><br>
-      <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br>
-      <input type="submit" value="提交">
+      <textarea id="comment" name="comment" rows="4" cols="50" required></textarea>
+      <input id="btn-submit" type="submit" value="✈">
     </form>
     <ul id="commentList">
-      <li>
-        <span class="name">用户名：</span>张三<br>
-        <span class="comment">评论内容</span><br>
-        <span class="time">2023-04-01 12:00:00</span>
-      </li>
-      <li>
-        <span class="name">用户名：</span>李四<br>
-        <span class="comment">评论内容</span><br>
-        <span class="time">2023-04-01 13:00:00</span>
-      </li>
+      {if !count($commentTable)}
+        <li><p>该文章暂无评论</p></li>
+      {else/}
+        {foreach $commentTable as $key=>$obj}
+          <li>
+            <img src="http://localhost:8000/static/images/{$obj->userName}.jpg" alt="用户头像" width="20" height="20">
+            <span class="name">{$obj->userName}</span><br>
+            <span class="time">{$obj->comment_time}</span><br>
+            <span class="comment">{$obj->content|raw}</span><br>
+          </li>
+        {/foreach}
+      {/if}
+
     </ul>
     <aside>
       <h2>◼相关文章</h2>

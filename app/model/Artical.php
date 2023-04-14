@@ -14,4 +14,9 @@ class Artical extends Model
         return $this->hasMany(Star::class,'text_id');
     }
 
+    public function comment()
+    {
+        return $this->hasMany(Comment::class,'text_id');
+    }
+
 }

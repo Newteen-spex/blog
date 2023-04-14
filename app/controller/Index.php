@@ -52,6 +52,15 @@ class Index extends BaseController
                     $q->table('dig')->where('user_id', User::Where('username', Session::get('username'))->find()->user_id)->field('text_id');
                 })->paginate(5);
             }
+        }else if($mid_page_title == '我评博文')
+        {
+            if (!$username) {
+                return redirect('http://localhost:8000/login/index');
+            }else {
+                $postList = Artical::where('artical_id', 'IN', function ($q) {
+                    $q->table('comment')->where('user_id', User::Where('username', Session::get('username'))->find()->user_id)->field('text_id');
+                })->paginate(5);
+            }
         }
 
         if(count($postList))

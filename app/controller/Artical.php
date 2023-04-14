@@ -6,6 +6,7 @@ use app\BaseController;
 use app\model\Dig;
 use app\model\Star;
 use app\model\Subcribe;
+use app\model\Comment;
 use think\facade\Session;
 use think\facade\View;
 use think\facade\Request;
@@ -184,6 +185,39 @@ class Artical extends BaseController
         }
     }
 
+    //发表评论
+    function upComment($textId)
+    {
+        $username = Session::get('username');
+        if(!$username){
+            return \redirect('http://localhost:8000/login/index');
+        }
+
+        $userId = User::where('username', $username)->find()->user_id;
+        $commentTime = date('y-m-d h:i:s');
+        $content = Request::post('comment');
+
+        //对评论内容修剪
+        $content = trim($content);
+        $content = htmlspecialchars($content);
+        $content = str_replace("\n","<br>",$content);
+        $content = str_replace(" ","&nbsp",$content);
+
+        //修改数据库
+        $textQuery = ArticalModel::find($textId);
+        ++$textQuery->comment_count;
+        $textQuery->save();
+
+        Comment::create([
+            'user_id'       =>      $userId,
+            'text_id'       =>      $textId,
+            'comment_time'  =>      $commentTime,
+            'content'       =>      $content
+        ]);
+        echo  "<script> alert('评论发布成功！'); </script>";
+        echo "<meta http-equiv='Refresh' content='0;URL=http://localhost:8000/artical/textLook/textId/".$textId."/tag/#commentList"."'>";
+    }
+
     //编辑文章
     function edit($textId)
     {
@@ -232,6 +266,7 @@ class Artical extends BaseController
             $userId = -1;
         }
 
+        //用于改变点赞按钮的样式
         $digQuery = Dig::where('user_id', $userId)->where('text_id', $textId)->find();
         if(!$digQuery){
             $digStatus = '点赞';
@@ -278,6 +313,14 @@ class Artical extends BaseController
         $textComment = $queryArtical->comment_count;
         $textScan = $queryArtical->look_count;
 
+
+        //查询文章关联的评论
+        $commentQuery = Comment::where('text_id', $textId)->select();
+        foreach ($commentQuery as $key=>$obj){
+            //增加属性
+            $obj->userName = User::find($obj->user_id)->username;
+        }
+
         //查询相关文章
         $closeText = ArticalModel::where('category',$textTag)->
                                    where('artical_id', '<>', $textId)->limit(5)->select();
@@ -297,7 +340,8 @@ class Artical extends BaseController
             'tag'           =>          $tag,
             'closeText'     =>          $closeText,
             'textId'        =>          $textId,
-            'digStatus'     =>          $digStatus
+            'digStatus'     =>          $digStatus,
+            'commentTable'  =>          $commentQuery
         ]);
     }
 }

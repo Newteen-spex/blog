@@ -34,4 +34,9 @@ class User extends Model
     {
         return $this->hasMany(Subcribe::class,'sub_id');
     }
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class,'user_id');
+    }
 }
