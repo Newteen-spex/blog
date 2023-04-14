@@ -37,8 +37,7 @@ class Index extends BaseController
                                 ->order('publish_time', 'desc')->paginate(5);
         }else if($mid_page_title == '收藏博文') {
             if (!$username) {
-                echo "<script> alert('请先登录！'); </script>";
-                echo "<meta http-equiv='Refresh' content='1;URL=http://localhost:8000/login/index'>";
+                return redirect('http://localhost:8000/login/index');
             } else {
                 $postList = Artical::where('artical_id', 'IN', function ($q) {
                     $q->table('star')->where('user_id', User::Where('username', Session::get('username'))->find()->user_id)->field('text_id');
@@ -47,8 +46,7 @@ class Index extends BaseController
         }else if($mid_page_title == '我赞博文')
         {
             if (!$username) {
-                echo "<script> alert('请先登录！'); </script>";
-                echo "<meta http-equiv='Refresh' content='1;URL=http://localhost:8000/login/index'>";
+                return redirect('http://localhost:8000/login/index');
             }else {
                 $postList = Artical::where('artical_id', 'IN', function ($q) {
                     $q->table('dig')->where('user_id', User::Where('username', Session::get('username'))->find()->user_id)->field('text_id');

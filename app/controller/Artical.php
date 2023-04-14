@@ -24,13 +24,15 @@ class Artical extends BaseController
     function subcribe($textAuthorId, $textId)
     {
         $username = Session::get('username');
+        if($username){
+            $userId = User::where('username', $username)->find()->user_id;
+        }
+
         if(!$username)
         {
-            echo "<script> alert('请先登录！'); </script>";
-            echo "<meta http-equiv='Refresh' content='0.5;URL=http://localhost:8000/login/index'>";
-        }else
+            return \redirect('http://localhost:8000/login/index');
+        }else if($textAuthorId != $userId)
         {
-            $userId = User::where('username', $username)->find()->user_id;
             $subQuery = Subcribe::where('sub_id', $userId)->where('subed_id', $textAuthorId)->find();
             if(!$subQuery)
             {
@@ -43,6 +45,8 @@ class Artical extends BaseController
             }else {
                 echo "<script> alert('您已关注该作者！'); </script>";
             }
+        }else{
+            echo "<script> alert('您不能关注你自己！'); </script>";
         }
         echo "<meta http-equiv='Refresh' content='0.5;URL=http://localhost:8000/artical/textLook/textId/".$textId."'>";
     }
