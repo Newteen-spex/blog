@@ -40,13 +40,13 @@
     <h1>博客注册</h1>
     <form action="http://localhost:8000/register/insert" method="post">
         <label for="username">用户名：</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="username" name="username" required placeholder="用户名长度不能超过15，不能有空格，且不能以数字开头">
         <label for="email">邮箱：</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" placeholder="请输入正确格式的邮箱，须包括'@'和'.'" required>
         <label for="password">密码：</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" placeholder="密码包括字母，数字，不许有空格，6位及以上" required>
         <label for="confirm_password">确认密码：</label>
-        <input type="password" id="confirm_password" name="confirm_password" required>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="请再输入一次密码" required>
         <label for="real_name">真实姓名：</label>
         <input type="text" id="real_name" name="real_name" required>
         <label for="id_card">学号：</label>
@@ -54,4 +54,80 @@
         <button id="register" type="submit">注册</button>
     </form>
 </body>
+<script>
+    //验证用户名
+    let x = document.getElementById('username');
+    x.onblur = function(){
+        let flag = false;
+        if(checkSpace(x.value)){
+            alert('用户名不能有空格!');
+            flag = true;
+        }
+        if(checkZero(x.value)){
+            alert('用户名不能以数字开头!');
+            flag = true;
+        }
+        if(checkLength(x.value)){
+            alert('用户名过长!');
+            flag = true;
+        }
+        if(flag){
+            x.value = '';
+        }
+    }
+
+    //验证邮箱
+    let y = document.getElementById('email');
+    y.onblur = function(){
+        if(!checkEmail(y.value)){
+            alert('邮箱格式错误！');
+            y.value = '';
+        }
+    }
+
+    //验证密码
+    let z = document.getElementById('password');
+    z.onblur = function(){
+        if(!checkPwd(z.value)){
+            alert('密码格式错误！');
+            z.value = '';
+        }
+    }
+
+    //验证确认密码
+    let w = document.getElementById('confirm_password');
+    w.onblur = function(){
+        if(z.value != '' && w.value != '' && z.value != w.value){
+            alert('两次密码不一致！');
+            w.value = '';
+        }
+    } 
+
+    //检查空格
+    function checkSpace(str){
+        return /\s/.test(str);
+    }
+
+    //检查长度
+    function checkLength(str){
+        return str.length > 15
+    }
+
+    //检查是否以数字开头
+    function checkZero(str){
+        return /^[0-9]/.test(str);
+    }
+
+    //检查邮箱格式
+    function checkEmail(str){
+        var re = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+        return re.test(str);
+    }
+
+    //检查密码格式
+    function checkPwd(str){
+        var re = /^(?=\S*[a-z])(?=\S*\d)\S{6,}$/;
+        return re.test(str);
+    }
+</script>
 </html>
