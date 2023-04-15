@@ -250,10 +250,34 @@ class Artical extends BaseController
 
     function textLook($textId, $tag = '#pageHead', $star = false)
     {
-        //浏览次数加一
-        $look = ArticalModel::find($textId);
-        ++$look->look_count;
-        $look->save();
+        //如果文章还没开启时间追踪，则开启
+        if(!Session::get('temp')){
+            $arr = [];
+            $arr = array_pad($arr, 1000, 0);
+            Session::set('temp', $arr);
+        }
+
+        //检查文章是否为初次浏览
+        if(Session::get('temp')[$textId] == 0){
+            //浏览次数加一
+            $look = ArticalModel::find($textId);
+            ++$look->look_count;
+            $look->save();
+            $arrTemp = Session::get('temp');
+            $arrTemp[$textId] = time();
+            Session::set('temp', $arrTemp);
+        }else{
+            if(time() - (int)Session::get('temp')[$textId] > 15){
+                //浏览次数加一
+                $look = ArticalModel::find($textId);
+                ++$look->look_count;
+                $look->save();
+                //更新
+                $arrTemp = Session::get('temp');
+                $arrTemp[$textId] = time();
+                Session::set('temp', $arrTemp);
+            }
+        }
 
         //主要用于改变右上角样式
         if(Session::get('username'))
