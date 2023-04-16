@@ -12,8 +12,8 @@ use app\model\Subcribe;
 use think\facade\Db;
 use think\facade\Env;
 use think\facade\View;
-use think\Request;
 use think\facade\Session;
+use think\facade\Request;
 
 class Index extends BaseController
 {
@@ -27,6 +27,15 @@ class Index extends BaseController
             $split = '';
             $register = 'Hello,'.$username;
         }
+
+        //如果有进行搜索操作
+        if(Session::get('search')){
+            $postList = Session::get('search');
+            $mid_page_title = '搜索结果';
+            Session::set('search', null);
+        }
+
+
         if($mid_page_title == '最新发布')
         {
             $postList = Artical::order('publish_time','desc')->paginate(5);
@@ -78,5 +87,33 @@ class Index extends BaseController
             'register'          =>      $register,
             'postList'          =>      $postList
         ]);
+    }
+
+    public function search()
+    {
+        $text = trim(Request::post('search'));
+        if(!strlen($text)){
+            echo "<script>alert('搜索无效！');</script>";
+            echo "<meta http-equiv='Refresh' content='1;URL=http://localhost:8000/index/index'>";
+            return;
+        }
+        if(str_starts_with($text, 'user:') && strlen($text) >= 6){
+            $text_trim = substr($text, 5);
+            Session::set('re', $text_trim);
+            $query = Artical::where('author_id', 'IN', function ($q) {
+                $q->table('user')->where('username', 'like', '%'.Session::get('re').'%')->field('user_id');
+            })->paginate(5);
+        }else if(str_starts_with($text, 'title:') && strlen($text) >= 7){
+            $text_trim = substr($text, 6);
+            $query = Artical::where('title', 'like', '%'.$text_trim.'%')->paginate(5);
+        }else if(str_starts_with($text, 'content:') && strlen($text) >= 9){
+            $text_trim = substr($text, 8);
+            $query = Artical::where('content', 'like', '%'.$text_trim.'%')->paginate(5);
+        }else{
+            $query = Artical::where('content', 'like', '%'.$text.'%')->paginate(5);
+        }
+
+        Session::set('search', $query);
+        return redirect('http://localhost:8000/index/index');
     }
 }
