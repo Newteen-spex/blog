@@ -127,6 +127,11 @@
             margin-left: 10px;
         }
 
+        #sidenav_item span:hover {
+            color: #3CB371;
+        }
+
+
         .fa-cubes, 
         .fa-thumbs-up,
         .fa-message,
@@ -254,6 +259,11 @@
             color: #808080;
         }
 
+        #site_categories_card a:hover{
+            text-decoration: blink;
+            color: #3CB371;
+        }
+
         /*页码样式*/
         .pagination {
             list-style: none;
@@ -286,6 +296,54 @@
         .friend_link a:hover {
             color: #2E8B57;
         }
+
+        /*左侧排行榜样式*/
+        #right-rank-card {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            border: 1px;
+            right:-60px;
+            background-color: #F5F5F5;
+            color: #A9A9A9;
+            font-size: 13px;
+            padding-left: 30px;
+            width: 220px;
+        }
+
+        #right-rank-card h4 {
+            font-weight:bold;
+            color: #808080;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+
+        #right-rank-card ol {
+            padding-left: 0%;
+        }
+
+        #right-rank-card li {
+            width: 60%;
+            margin-bottom: 10px;
+        }
+
+        #right-rank-card a {
+            text-decoration: none;
+            color: #A9A9A9;
+        }
+
+        #right-rank-card a:hover {
+            text-decoration: underline;
+            color: #3CB371;
+        }
+
+        #dig-rank-card, 
+        #comment-rank-card,
+        #look-rank-card {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
     </style>
 </head>
 <body class="parant">
@@ -357,7 +415,7 @@
                                         <div class="post_item_summary">
                                             <div>
                                                 <a href="http://localhost:8000/home/others/authorName/{$obj->category}">
-                                                    <img src="http://localhost:8000/static/images/{$obj->category}.jpg" alt="博主头像" width="50" height="50">
+                                                    <img src="http://localhost:8000/static/images/{$obj->category}.jpg" alt="🚫" width="50" height="50">
                                                 </a>
                                             </div>
                                             <div class="post_item_abstract">
@@ -411,6 +469,44 @@
                 <p>title:匹配文章标题</p>
                 <p>content:匹配文章内容</p>
                 <p>[默认无指示为内容匹配]</p>
+            </div>
+        </div>
+        <div id="right-rank-card">
+            <div id="dig-rank-card">
+                <h4>点赞排行榜</h4>
+                <ol>
+                    {if !count($digList)}
+                        <li>暂无文章</li>
+                    {else/}
+                        {foreach $digList as $key=>$obj}
+                            <li><a href="http://localhost:8000/artical/textLook/textId/{$obj->artical_id}">{$obj->title}</a></li>
+                        {/foreach}
+                    {/if}
+                </ol>
+            </div>
+            <div id="comment-rank-card">
+                <h4>评论排行榜</h4>
+                <ol>
+                    {if !count($commentList)}
+                        <li>暂无文章</li>
+                    {else/}
+                        {foreach $commentList as $key=>$obj}
+                            <li><a href="http://localhost:8000/artical/textLook/textId/{$obj->artical_id}">{$obj->title}</a></li>
+                        {/foreach}
+                    {/if}
+                </ol>
+            </div>
+            <div id="look-rank-card">
+                <h4>浏览排行榜</h4>
+                <ol>
+                    {if !count($lookList)}
+                        <li>暂无文章</li>
+                    {else/}
+                        {foreach $lookList as $key=>$obj}
+                            <li><a href="http://localhost:8000/artical/textLook/textId/{$obj->artical_id}">{$obj->title}</a></li>
+                        {/foreach}
+                    {/if}
+                </ol>
             </div>
         </div>
     </div>

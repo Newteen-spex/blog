@@ -95,6 +95,10 @@
             box-shadow: 0 2px 4px 1px rgba(200,200,200,.5);
         }
 
+        .avatar {
+            cursor: pointer;
+        }
+
         /* Personal Info Styles */
         .personal-info label {
             display: block;
@@ -296,7 +300,7 @@
             </form>
         </div>
         <div class="welcome-message">
-            <img src="../static/images/{$avatar}" alt="编辑头像" class="avatar" onclick="display('avatar_edit')">
+            <img src="../static/images/{$avatar}" alt="🚫" class="avatar" onclick="display('avatar_edit')">
             <p>{$nav_alt}</p>
         </div>
         <nav class="navbar">
@@ -407,7 +411,7 @@
                     {foreach $mySubcribes as $key=>$obj}
                         <li>
                             <a href="http://localhost:8000/home/others/authorName/{$obj->username}">
-                                <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="博友头像">
+                                <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="🚫">
                                 <h3>{$obj->username}</h3>
                             </a>
                             <div class="follow-buttons">
@@ -428,7 +432,7 @@
                     {foreach $myFollowers as $key=>$obj}
                         <li>
                             <a href="http://localhost:8000/home/others/authorName/{$obj->username}">
-                                <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="粉丝头像">
+                                <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="🚫">
                                 <h3>{$obj->username}</h3>
                             </a>
                         </li>

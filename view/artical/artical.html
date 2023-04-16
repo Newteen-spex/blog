@@ -119,7 +119,8 @@
         margin-bottom: 18px;
       }
       #commentList li {
-        border-bottom: 1px solid #F0FFF0;
+        border-bottom: 1px dashed #999;
+        margin-bottom: 15px;
       }
       #btn-submit {
         border: none;
@@ -164,6 +165,11 @@
       aside a{
         text-decoration: none;
         color: #555555;
+      }
+
+      aside a:hover{
+        text-decoration: underline;
+        color: #4CAF50;
       }
     </style>
 </head>
@@ -216,7 +222,7 @@
       {else/}
         {foreach $commentTable as $key=>$obj}
           <li>
-            <img src="http://localhost:8000/static/images/{$obj->userName}.jpg" alt="用户头像" width="20" height="20">
+            <img src="http://localhost:8000/static/images/{$obj->userName}.jpg" alt="🚫" width="20" height="20">
             <span class="name">{$obj->userName}</span><br>
             <span class="time">{$obj->comment_time}</span><br>
             <span class="comment">{$obj->content|raw}</span><br>

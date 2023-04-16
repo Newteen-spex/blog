@@ -339,7 +339,7 @@ class Artical extends BaseController
 
 
         //查询文章关联的评论
-        $commentQuery = Comment::where('text_id', $textId)->select();
+        $commentQuery = Comment::where('text_id', $textId)->order('comment_time', 'desc')->select();
         foreach ($commentQuery as $key=>$obj){
             //增加属性
             $obj->userName = User::find($obj->user_id)->username;

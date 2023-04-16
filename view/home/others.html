@@ -171,7 +171,7 @@
     </nav>
     <div class="profile">
         <div class="avatar">
-            <img src="http://localhost:8000/static/images/{$authorName}.jpg" alt="用户头像">
+            <img src="http://localhost:8000/static/images/{$authorName}.jpg" alt="🚫">
         </div>
         <div class="info">
             <h1>{$authorName}</h1>
@@ -207,7 +207,7 @@
                 {foreach $followers as $key=>$obj}
                     <li>
                         <a href="http://localhost:8000/home/others/authorName/{$obj->username}">
-                            <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="粉丝头像">
+                            <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="🚫">
                             <span>{$obj->username}</span>
                         </a>
                     </li>
@@ -225,7 +225,7 @@
                 {foreach $subcribes as $key=>$obj}
                     <li>
                         <a href="http://localhost:8000/home/others/authorName/{$obj->username}">
-                            <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="博友头像">
+                            <img src="http://localhost:8000/static/images/{$obj->username}.jpg" alt="🚫">
                             <span>{$obj->username}</span>
                         </a>
                     </li>

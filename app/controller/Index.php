@@ -80,12 +80,23 @@ class Index extends BaseController
                 $obj->category = User::find($obj->author_id)->username;
             }
         }
+
+
+        //左侧排行榜
+        $digList = Artical::order('dig_count', 'desc')->limit(5)->select();
+        $commentList = Artical::order('comment_count', 'desc')->limit(5)->select();
+        $lookList = Artical::order('look_count', 'desc')->limit(5)->select();
+
+
         return View::fetch('index', [
             'mid_page_title'    =>      $mid_page_title,
             'login'             =>      $login,
             'split'             =>      $split,
             'register'          =>      $register,
-            'postList'          =>      $postList
+            'postList'          =>      $postList,
+            'digList'           =>      $digList,
+            'commentList'       =>      $commentList,
+            'lookList'          =>      $lookList
         ]);
     }
 
