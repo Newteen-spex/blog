@@ -12,6 +12,8 @@
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: white;
+            height: 1045px;
+            justify-content: space-between;
         }
         /*顶部导航栏样式*/
         .header {
@@ -150,6 +152,10 @@
     
         .mid_page {
             width: 100%;
+        }
+
+        #sorry {
+            margin-right: 160px;
         }
 
         .mid_page_title  {
@@ -347,7 +353,8 @@
     </style>
 </head>
 <body class="parant">
-    <div class="header">
+    <div>
+        <div class="header">
         <div class="nav_top_left">
             <p id="nav_top_title">中南民大校园博客平台<p>
         </div>
@@ -368,8 +375,8 @@
                 </ul>
             </nav>
         </div>
-    </div>
-    <div class="main_body">
+        </div>
+        <div class="main_body">
         <div class="sidenav">
             <ul id="sidenav_ul">
                 <li id="sidenav_li">
@@ -404,7 +411,7 @@
                 <div class="post_list">
                     {if !count($postList)}
                         <div>
-                            <p>对不起，该区暂无该文章</p>
+                            <p id="sorry">对不起，该区暂无该文章</p>
                         </div>
                     {else/}
                         {foreach $postList as $key=>$obj}
@@ -508,6 +515,7 @@
                     {/if}
                 </ol>
             </div>
+        </div>
         </div>
     </div>
     <footer class="footer_footer">
