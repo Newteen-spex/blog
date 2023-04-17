@@ -112,15 +112,15 @@ class Home extends BaseController
         $username = Session::get('username');
         $file = request()->file('edit_avatar');
         try{
-            validate(['image'=>'fileExt:jpg,png,gif'])->check(['image'=>$file]);
+            validate(['image'=>'fileSize:300000|fileExt:jpg,png,gif'])->check(['image'=>$file]);
             $saveFile = \think\facade\Filesystem::disk('public')->putFileAs('images', $file, $username.'.jpg');
             echo "<script> alert('头像更改成功！'); </script>";
         }catch (\think\exception\ValidateException $e)
         {
-            echo $e->getMessage().'，请选择以jpg,png,gif为后缀的图片文件';
+            echo $e->getMessage().'，请选择以jpg,png,gif为后缀的大小在300KB以内的图片文件';
 
         }
-        echo "<meta http-equiv='Refresh' content='2;URL=http://localhost:8000/home/index'>";
+        echo "<meta http-equiv='Refresh' content='3;URL=http://localhost:8000/home/index'>";
     } 
 
 
