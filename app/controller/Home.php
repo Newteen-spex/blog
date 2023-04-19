@@ -176,7 +176,7 @@ class Home extends BaseController
         $username = Session::get('username');
 
         $email = Request::post('email');
-        $idNumber = Request::post('id_number');
+        //$idNumber = Request::post('id_number');
         $school = Request::post('school');
         $major = Request::post('major');
         $selfIntro = Request::post('self_intro');
@@ -198,8 +198,7 @@ class Home extends BaseController
             ]);
         }
         User::where('username',$username)->update([
-                'email'         =>      $email,
-                'student_id'    =>      $idNumber
+                'email'         =>      $email
         ]);
         return redirect('http://localhost:8000/home/index');
     }
