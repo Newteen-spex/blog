@@ -132,7 +132,8 @@ class Home extends BaseController
             return redirect('http://localhost:8000/home/index');
         }else{
             $query = User::where('username',$authorName)->find();
-            $authorStudentId = $query->student_id;
+            //把学号展示换成邮箱展示
+            $authorEmail = $query->email;
             $authorRegisterTime = $query->create_time;
             $infoQuery = $query->info()->find();
             if($infoQuery){
@@ -154,7 +155,7 @@ class Home extends BaseController
 
             return View::fetch('others', [
                 'authorName'       =>       $authorName,
-                'authorStudentId'  =>       $authorStudentId,
+                'authorEmail'      =>       $authorEmail,
                 'authorRegisterTime'    =>  $authorRegisterTime,
                 'authorIntroduce'  =>       $authorIntroduce,
                 'articalList'      =>       $articalList,
