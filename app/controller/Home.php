@@ -133,12 +133,14 @@ class Home extends BaseController
             $query = User::where('username',$authorName)->find();
             //把学号展示换成邮箱展示
             $authorEmail = $query->email;
-            $authorRegisterTime = $query->create_time;
+            //把创建时间展示改成专业展示
             $infoQuery = $query->info()->find();
             if($infoQuery){
-                $authorIntroduce = $infoQuery->introduce;
+                $authorIntroduce = $infoQuery->introduce==''?'该用户暂无个人介绍':$infoQuery->introduce;
+                $authorMajor = $infoQuery->major==''?'该用户暂未填写专业':$infoQuery->major;
             }else{
                 $authorIntroduce = '该用户暂无个人介绍';
+                $authorMajor = '该用户暂未填写专业';
             }
             $articalList = $query->artical()->order('publish_time', 'desc')->select();
 
@@ -155,7 +157,7 @@ class Home extends BaseController
             return View::fetch('others', [
                 'authorName'       =>       $authorName,
                 'authorEmail'      =>       $authorEmail,
-                'authorRegisterTime'    =>  $authorRegisterTime,
+                'authorMajor'      =>       $authorMajor,
                 'authorIntroduce'  =>       $authorIntroduce,
                 'articalList'      =>       $articalList,
                 'subcribes'        =>       $subcribes,
