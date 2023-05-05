@@ -17,8 +17,7 @@ use think\response\Redirect;
 class Home extends BaseController
 {
     function index ($nav_alt = '欢迎回来, [用户名]', $logout = '', $userName = '[Username]',
-                    $email = '[Email]', $idNumber = '[id_number]', $school = '[School]',
-                    $major = '[Major]', $selfIntro = '[self_intro]')
+                    $email = '[Email]', $idNumber = '[id_number]',$major = '', $selfIntro = '')
     {
         $username = Session::get('username');
         if(!$username){
@@ -31,7 +30,7 @@ class Home extends BaseController
 
             $infoQuery = $query->info()->find();
             if($infoQuery){
-                $school = $infoQuery->school;
+                //$school = $infoQuery->school;
                 $major = $infoQuery->major;
                 $selfIntro = $infoQuery->introduce;
             }
@@ -68,7 +67,7 @@ class Home extends BaseController
             'userName'      =>      $userName,
             'email'         =>      $email,
             'idNumber'      =>      $idNumber,
-            'school'        =>      $school,
+            //'school'        =>      $school,
             'major'         =>      $major,
             'selfIntro'     =>      $selfIntro,
             'textList'      =>      $textList,
@@ -178,7 +177,7 @@ class Home extends BaseController
 
         $email = Request::post('email');
         //$idNumber = Request::post('id_number');
-        $school = Request::post('school');
+        //$school = Request::post('school');
         $major = Request::post('major');
         $selfIntro = Request::post('self_intro');
         $query = User::where('username',$username)->find();
@@ -187,13 +186,13 @@ class Home extends BaseController
         {
             Info::create([
                 'user_id'       =>      $query->user_id,
-                'school'        =>      $school,
+                'school'        =>      "中南民族大学",
                 'introduce'     =>      $selfIntro,
                 'major'         =>      $major
             ]);
         }else{
             $query->info()->update([
-                'school'        =>      $school,
+                //'school'        =>      $school,
                 'introduce'     =>      $selfIntro,
                 'major'         =>      $major
             ]);

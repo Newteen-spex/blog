@@ -319,16 +319,14 @@
             <form action="http://localhost:8000/home/updateInfo" method="post">
                 <label for="username">用户名:</label>
                 <input type="text" id="username" name="username" value="{$userName}" disabled>
-                <label for="email">电子邮件:</label>
-                <input type="email" id="email" name="email" value="{$email}" required>
                 <label for="id_number">学号:</label>
                 <input type="text" id="id_number" name="id_number" value="{$idNumber}" disabled>
-                <label for="school">学校:</label>
-                <input type="text" id="school" name="school" value="{$school}">
                 <label for="major">专业:</label>
-                <input type="text" id="major" name="major" value="{$major}">
+                <input type="text" id="major" name="major" value="{$major}" placeholder="用户专业未填写，请点击输入">
+                <label for="email">电子邮件:</label>
+                <input type="email" id="email" name="email" value="{$email}" required>
                 <label for="self_intro">个人介绍:</label>
-                <input type="text" id="self_intro" name="self_intro" value="{$selfIntro}">
+                <input type="text" id="self_intro" name="self_intro" value="{$selfIntro}" placeholder="用户个人介绍未填写，请点击输入">
                 <button type="submit">更新</button>
             </form>
         </section>
